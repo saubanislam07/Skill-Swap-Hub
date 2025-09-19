@@ -1,0 +1,38 @@
+{
+  "expo": {
+    "name": "Skill Swap Hub",
+    "slug": "skill-swap-hub",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "https://via.placeholder.com/1024x1024/4CAF50/FFFFFF?text=SSH",
+    "userInterfaceStyle": "light",
+    "splash": {
+      "image": "https://via.placeholder.com/1284x2778/4CAF50/FFFFFF?text=Skill+Swap+Hub",
+      "resizeMode": "contain",
+      "backgroundColor": "#4CAF50"
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.skillswaphub.app",
+      "buildNumber": "1.0.0",
+      "infoPlist": {
+        "NSCameraUsageDescription": "This app uses camera to take profile pictures",
+        "NSPhotoLibraryUsageDescription": "This app uses photo library to select profile pictures",
+        "NSLocationWhenInUseUsageDescription": "This app uses location to find nearby skill swappers"
+      }
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "https://via.placeholder.com/1024x1024/4CAF50/FFFFFF?text=SSH",
+        "backgroundColor": "#4CAF50"
+      },
+      "package": "com.skillswaphub.app"
+    },
+    "web": {
+      "favicon": "https://via.placeholder.com/32x32/4CAF50/FFFFFF?text=S"
+    },
+  }
+}
