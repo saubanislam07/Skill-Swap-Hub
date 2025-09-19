@@ -68,10 +68,23 @@ export default function ProfileScreen({ navigation }) {
     );
   };
 
-  const handleAvatarUpdate = (avatar) => {
-    setSelectedAvatar(avatar);
-    // Here you would typically update the user's avatar in the backend
-    Alert.alert('Avatar Updated', 'Your profile avatar has been updated successfully!');
+  const handleAvatarUpdate = async (avatar) => {
+    try {
+      console.log('Updating avatar:', avatar);
+      setSelectedAvatar(avatar);
+
+      // TODO: Update user avatar in backend
+      // await api.updateProfile({ avatar: avatar.url });
+
+      Alert.alert(
+        'Avatar Updated',
+        `Your profile avatar has been updated to "${avatar.name}"!`,
+        [{ text: 'OK', style: 'default' }]
+      );
+    } catch (error) {
+      console.error('Avatar update error:', error);
+      Alert.alert('Update Failed', 'Failed to update avatar. Please try again.');
+    }
   };
 
   const handleSkillsUpdate = (skills) => {
@@ -94,6 +107,7 @@ export default function ProfileScreen({ navigation }) {
         >
           <Ionicons name="settings-outline" size={24} color="#333" />
         </TouchableOpacity>
+        <Text style={styles.headerTitle}>My Profile</Text>
         <View style={styles.headerRight}>
           <TouchableOpacity style={styles.shareButton}>
             <Ionicons name="share-outline" size={24} color="#333" />
@@ -113,14 +127,20 @@ export default function ProfileScreen({ navigation }) {
             <Image
               source={{ uri: selectedAvatar.url }}
               style={styles.profileImage}
-              resizeMode="contain"
+              resizeMode="cover"
+            />
+          ) : user?.avatar ? (
+            <Image
+              source={{ uri: user.avatar }}
+              style={styles.profileImage}
+              resizeMode="cover"
             />
           ) : (
             <Avatar
               user={user}
               name={user?.name || 'Sauban Islam'}
               size={120}
-              gender="male"
+              gender={user?.gender || 'male'}
             />
           )}
           <View style={styles.editAvatarOverlay}>
@@ -128,6 +148,32 @@ export default function ProfileScreen({ navigation }) {
           </View>
         </TouchableOpacity>
         <Text style={styles.name}>{user?.name || 'Sauban Islam'}</Text>
+        <TouchableOpacity
+          style={styles.avatarEditHint}
+          onPress={() => setShowAvatarSelector(true)}
+        >
+          <Ionicons name="camera-outline" size={14} color="#4CAF50" />
+          <Text style={styles.avatarEditText}>
+            {selectedAvatar ? 'Change avatar' : 'Tap to select avatar'}
+          </Text>
+        </TouchableOpacity>
+        {selectedAvatar && (
+          <View style={styles.avatarStatusContainer}>
+            <View style={styles.avatarStatus}>
+              <Ionicons name="checkmark-circle" size={16} color="#4CAF50" />
+              <Text style={styles.avatarStatusText}>Custom avatar selected</Text>
+            </View>
+            <TouchableOpacity
+              style={styles.resetAvatarButton}
+              onPress={() => {
+                setSelectedAvatar(null);
+                Alert.alert('Avatar Reset', 'Avatar has been reset to default.');
+              }}
+            >
+              <Text style={styles.resetAvatarText}>Reset to default</Text>
+            </TouchableOpacity>
+          </View>
+        )}
         <View style={styles.ratingContainer}>
           <Ionicons name="star" size={16} color="#FFD700" />
           <Text style={styles.rating}>4.8 (125 reviews)</Text>
@@ -226,7 +272,7 @@ export default function ProfileScreen({ navigation }) {
         onClose={() => setShowAvatarSelector(false)}
         onSelectAvatar={handleAvatarUpdate}
         currentAvatar={selectedAvatar}
-        title="Update Your Avatar"
+        title="Choose Your Profile Avatar"
       />
 
       {/* Skills Selector Modal */}
@@ -254,6 +300,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: 20,
     marginBottom: 20,
+  },
+  headerTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#333',
   },
   headerRight: {
     flexDirection: 'row',
@@ -301,6 +352,45 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: '#333',
     marginBottom: 8,
+  },
+  avatarEditHint: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#f0f8f0',
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 15,
+    marginBottom: 12,
+  },
+  avatarEditText: {
+    fontSize: 12,
+    color: '#4CAF50',
+    fontWeight: '500',
+    marginLeft: 4,
+  },
+  avatarStatusContainer: {
+    alignItems: 'center',
+    marginBottom: 8,
+  },
+  avatarStatus: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 4,
+  },
+  avatarStatusText: {
+    fontSize: 11,
+    color: '#4CAF50',
+    fontWeight: '500',
+    marginLeft: 4,
+  },
+  resetAvatarButton: {
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+  },
+  resetAvatarText: {
+    fontSize: 10,
+    color: '#666',
+    textDecorationLine: 'underline',
   },
   ratingContainer: {
     flexDirection: 'row',

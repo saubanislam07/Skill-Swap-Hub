@@ -13,7 +13,7 @@ import {
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useAuth } from '../context/AuthContext';
-import AvatarSelector from '../components/AvatarSelector';
+import CoolAvatarSelector from '../components/CoolAvatarSelector';
 import SkillsSelector from '../components/SkillsSelector';
 
 export default function SignUpScreen({ navigation }) {
@@ -77,6 +77,33 @@ export default function SignUpScreen({ navigation }) {
     setLearningSkills(skills.learningSkills);
   };
 
+  const getAvatarStyleColor = (style) => {
+    const colors = {
+      modern: '#667eea',
+      trendy: '#764ba2',
+      hipster: '#f093fb',
+      tech: '#4facfe',
+      creative: '#00d2ff',
+      professional: '#c7ecee',
+      casual: '#ff9a9e',
+      sporty: '#feca57',
+      elegant: '#667eea',
+      artistic: '#f093fb',
+      bohemian: '#ff9a9e',
+      futuristic: '#2ed573',
+      cyberpunk: '#ff3838',
+      retro: '#ff6348',
+      minimalist: '#a4b0be',
+      colorful: '#ff4757',
+      mystical: '#6c5ce7',
+      gamer: '#00b894',
+      musician: '#fd79a8',
+      explorer: '#fdcb6e',
+      chef: '#e84393'
+    };
+    return colors[style] || '#4CAF50';
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView contentContainerStyle={styles.content}>
@@ -97,30 +124,37 @@ export default function SignUpScreen({ navigation }) {
           <Text style={styles.subtitle}>Start trading skills with your community</Text>
         </View>
 
-        {/* Avatar Selection */}
+        {/* Enhanced Avatar Selection */}
         <View style={styles.avatarSection}>
-          <Text style={styles.avatarLabel}>Choose Your Avatar</Text>
+          <Text style={styles.avatarLabel}>Choose Your Cool Avatar</Text>
+          <Text style={styles.avatarSubtitle}>Pick from 26+ awesome styles!</Text>
           <TouchableOpacity
             style={styles.avatarSelector}
             onPress={() => setShowAvatarSelector(true)}
           >
             {selectedAvatar ? (
-              <Image
-                source={{ uri: selectedAvatar.url }}
-                style={styles.selectedAvatarImage}
-                resizeMode="contain"
-              />
+              <View style={styles.selectedAvatarWrapper}>
+                <Image
+                  source={{ uri: selectedAvatar.url }}
+                  style={styles.selectedAvatarImage}
+                  resizeMode="contain"
+                />
+                <View style={[styles.avatarStyleBadge, { backgroundColor: getAvatarStyleColor(selectedAvatar.style) }]}>
+                  <Text style={styles.avatarStyleText}>{selectedAvatar.style}</Text>
+                </View>
+              </View>
             ) : (
               <View style={styles.defaultAvatarContainer}>
                 <Ionicons name="person-add" size={40} color="#666" />
+                <Text style={styles.defaultAvatarText}>Tap to browse</Text>
               </View>
             )}
             <View style={styles.avatarSelectorOverlay}>
-              <Ionicons name="camera" size={20} color="#fff" />
+              <Ionicons name="sparkles" size={20} color="#fff" />
             </View>
           </TouchableOpacity>
           <Text style={styles.avatarHint}>
-            {selectedAvatar ? selectedAvatar.name : 'Tap to select avatar'}
+            {selectedAvatar ? `${selectedAvatar.name} - ${selectedAvatar.style}` : 'Choose from Modern, Tech, Creative & more!'}
           </Text>
         </View>
 
@@ -285,13 +319,13 @@ export default function SignUpScreen({ navigation }) {
         </View>
       </ScrollView>
 
-      {/* Avatar Selector Modal */}
-      <AvatarSelector
+      {/* Cool Avatar Selector Modal */}
+      <CoolAvatarSelector
         visible={showAvatarSelector}
         onClose={() => setShowAvatarSelector(false)}
         onSelectAvatar={setSelectedAvatar}
         currentAvatar={selectedAvatar}
-        title="Choose Your Profile Avatar"
+        title="Choose Your Cool Avatar"
       />
 
       {/* Skills Selector Modal */}
@@ -461,20 +495,47 @@ const styles = StyleSheet.create({
     marginBottom: 30,
   },
   avatarLabel: {
-    fontSize: 16,
-    fontWeight: '600',
+    fontSize: 18,
+    fontWeight: 'bold',
     color: '#333',
-    marginBottom: 15,
+    marginBottom: 5,
+    textAlign: 'center',
+  },
+  avatarSubtitle: {
+    fontSize: 14,
+    color: '#4CAF50',
+    marginBottom: 20,
+    textAlign: 'center',
+    fontWeight: '500',
   },
   avatarSelector: {
     position: 'relative',
     marginBottom: 10,
+  },
+  selectedAvatarWrapper: {
+    position: 'relative',
+    alignItems: 'center',
   },
   selectedAvatarImage: {
     width: 100,
     height: 100,
     borderRadius: 50,
     backgroundColor: '#f5f5f5',
+  },
+  avatarStyleBadge: {
+    position: 'absolute',
+    bottom: -8,
+    paddingHorizontal: 8,
+    paddingVertical: 3,
+    borderRadius: 10,
+    borderWidth: 2,
+    borderColor: '#fff',
+  },
+  avatarStyleText: {
+    fontSize: 10,
+    color: '#fff',
+    fontWeight: '600',
+    textTransform: 'capitalize',
   },
   defaultAvatarContainer: {
     width: 100,
@@ -484,21 +545,32 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     borderWidth: 2,
-    borderColor: '#e0e0e0',
+    borderColor: '#4CAF50',
     borderStyle: 'dashed',
+  },
+  defaultAvatarText: {
+    fontSize: 12,
+    color: '#666',
+    marginTop: 5,
+    fontWeight: '500',
   },
   avatarSelectorOverlay: {
     position: 'absolute',
     bottom: 0,
     right: 0,
-    width: 32,
-    height: 32,
-    borderRadius: 16,
-    backgroundColor: '#4CAF50',
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    backgroundColor: '#FF6B6B',
     justifyContent: 'center',
     alignItems: 'center',
     borderWidth: 3,
     borderColor: '#fff',
+    shadowColor: '#FF6B6B',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.3,
+    shadowRadius: 4,
+    elevation: 3,
   },
   avatarHint: {
     fontSize: 14,
